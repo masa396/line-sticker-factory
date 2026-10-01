@@ -1,148 +1,313 @@
 <!doctype html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#fffdf8" />
-    <meta name="description" content="LINEスタンプ画像を整理・確認し、提出用ZIPを作成するブラウザ完結アプリ" />
-    <title>スタンプ工房 | LINEスタンプ制作サポート</title>
-    <style>
-:root { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Yu Gothic', sans-serif; color: #252525; background: #fffdf8; font-synthesis: none; }
-* { box-sizing: border-box; } body { margin: 0; } button, input, textarea { font: inherit; } button { cursor: pointer; }
-main { max-width: 680px; margin: auto; padding: env(safe-area-inset-top) 18px calc(42px + env(safe-area-inset-bottom)); overflow: hidden; }
-.topbar { height: 66px; display:flex; align-items:center; gap:8px; font-size:15px; letter-spacing:.04em; }
-.brand-mark { display:flex; align-items:end; gap:2px; width:20px; height:22px; } .brand-mark span { width:5px; border-radius:6px; background:#ff6a47; } .brand-mark span:nth-child(1) { height:11px }.brand-mark span:nth-child(2) { height:19px; background:#29323d }.brand-mark span:nth-child(3) { height:15px; background:#ffbb50 }.version { margin-left:auto; font: 11px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color:#717171; border:1px solid #dedbd4; border-radius:20px; padding:4px 8px; }
-.hero { padding:36px 5px 29px; position:relative; } .hero:after { content:'✦'; color:#ffb03e; position:absolute; right:6%; top:27px; font-size:30px; transform:rotate(13deg); } .eyebrow,.step { color:#f06445; font: 11px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; letter-spacing:.1em; margin:0 0 7px; } h1 { margin:0; font-size:35px; letter-spacing:-.07em; line-height:1.34; font-weight:800; } h1 em { color:#f06445; font-style:normal; font-family:-apple-system, BlinkMacSystemFont, 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif; letter-spacing:0; } .hero > p:last-child { color:#777; font-size:13px; margin:13px 0 0; }
-.progress-card { background:#29323d; padding:17px 18px; border-radius:15px; color:#fff; box-shadow:4px 5px 0 #f6d9c6; margin-bottom:35px; }.progress-card>div:first-child { display:flex; justify-content:space-between; font-size:12px; }.progress-card b { font: 16px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color:#ffc053 }.progress { height:5px; background:#57606a; margin:11px 0 8px; border-radius:4px; overflow:hidden }.progress i { display:block; height:100%; background:#ff7253; border-radius:4px; transition:width .3s }.progress-card small { font-size:10px; color:#c7cdd2; }
-.section { padding:0 2px; margin:0 0 39px; } .section-heading { display:flex; justify-content:space-between; align-items:center; margin-bottom:17px; }.section-heading svg { color:#f06445 }.section-heading h2 { margin:0; font-size:20px; letter-spacing:-.04em; }.step { font-size:10px; margin-bottom:3px; }.count { background:#fff0d6; color:#b16926; padding:5px 9px; border-radius:12px; font:11px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
-label { display:block; font-size:12px; font-weight:600; margin-top:13px; } label small { font-size:9px; color:#e65e42; background:#fff0eb; padding:2px 5px; border-radius:4px; margin-left:4px; } input,textarea { width:100%; border:1px solid #dedbd4; background:#fffefa; border-radius:10px; display:block; padding:12px; color:#252525; font-size:14px; outline:0; margin-top:6px; transition:border .2s, box-shadow .2s; }input:focus,textarea:focus { border-color:#ff856c; box-shadow:0 0 0 3px #ffebe5; }textarea { resize:vertical; }
-.images-section { border-top:1px dashed #ded8ce; padding-top:30px; }.hint { color:#777; font-size:11px; margin:-9px 0 13px; }.drop-zone { min-height:142px; border:1.5px dashed #e7b79c; border-radius:14px; background:#fff9f1; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#3b3b3b; transition:.2s; }.drop-zone.dragging,.drop-zone:hover { background:#fff0e2; border-color:#f06445; }.drop-zone input { display:none }.upload-icon { width:39px; height:39px; border-radius:50%; background:#ff704f; color:#fff; display:grid; place-items:center; margin-bottom:8px; box-shadow:0 3px 0 #d44d34 }.drop-zone b { font-size:14px }.drop-zone span { font-size:11px; color:#888; margin-top:3px; }
-.image-grid { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:13px; margin-top:16px; }.sticker-card { min-width:0; }.image-frame { border:1px solid #e5e1d9; background:#fff; border-radius:10px; height:134px; display:grid; place-items:center; position:relative; overflow:hidden; }.image-frame img { max-width:100%; max-height:100%; object-fit:contain; }.image-frame span { position:absolute; top:7px; left:7px; color:#fff; background:#29323d; border-radius:4px; padding:2px 5px; font:10px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }.image-frame button { position:absolute; right:6px; top:6px; border:0; display:grid; place-items:center; color:#5e5e5e; background:#fff; border-radius:50%; width:25px; height:25px; box-shadow:0 1px 4px #aaa; }.sticker-card>p { margin:6px 0 3px; color:#777; font:10px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }.issue,.ok { font-size:10px; display:flex; gap:3px; align-items:center; }.issue { color:#d9593f; }.ok { color:#52966a; }.warning { margin-top:17px; padding:12px; display:flex; gap:9px; background:#fff4ed; color:#c55840; border-radius:10px; font-size:11px; }.warning svg { flex:none; margin-top:2px }.warning p { margin:0; line-height:1.7 }.warning b { font-size:12px; }
-.checklist-section { border-top:1px dashed #ded8ce; padding-top:30px; }.checklist { border-top:1px solid #e8e5df; }.checklist>div { min-height:48px; display:flex; align-items:center; gap:10px; border-bottom:1px solid #e8e5df; font-size:12px; }.checklist span { width:19px; height:19px; flex:none; border:1px solid #ccc8c0; border-radius:50%; display:grid; place-items:center; }.checklist .done span { background:#65a979; border-color:#65a979; color:white; }.checklist p { margin:0; }.checklist b { margin-left:auto; color:#5a9b6e; font:11px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
-.export-card { background:#fff1cf; margin:0 -2px; border-radius:16px; padding:16px; display:grid; grid-template-columns:43px 1fr auto; align-items:center; gap:10px; position:relative; }.export-icon { width:42px; height:42px; background:#ffc75e; color:#5b4218; border-radius:12px; display:grid; place-items:center; }.export-card p { margin:0; font-size:13px; font-weight:700; }.export-card small { color:#826d4d; font-size:10px; }.export-card>svg { color:#b9955c; }.export-card button { grid-column:1/-1; border:0; padding:12px; border-radius:9px; background:#29323d; color:#fff; font-weight:700; font-size:13px; display:flex; justify-content:center; align-items:center; gap:7px; }.export-card button:disabled { background:#aca9a0; cursor:not-allowed; } footer { font-size:10px; color:#9b978f; text-align:center; margin-top:35px; }
-@media(min-width:600px) { main { padding-left:30px; padding-right:30px; } .image-grid { grid-template-columns:repeat(3, 1fr); } .image-frame { height:150px; } }
-    </style>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script>
-const MAX_STICKERS = 40
-const MAX_WIDTH = 370
-const MAX_HEIGHT = 320
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>スタンプ工房 Ver.2</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#fffdf8;color:#292929;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}
+main{max-width:720px;margin:0 auto;padding:18px 16px 50px}
+header{display:flex;justify-content:space-between;align-items:center;padding:6px 0 24px}
+.ver{font-size:11px;color:#777;border:1px solid #ddd;border-radius:20px;padding:5px 9px}
+.hero{padding:12px 0 24px}.eyebrow{font-size:11px;color:#f06445;letter-spacing:.12em}
+h1{font-size:31px;line-height:1.35;margin:7px 0}.hero h1 span{color:#f06445}
+.hero p{font-size:13px;color:#777}
+.progress{background:#29323d;color:#fff;border-radius:15px;padding:16px;margin-bottom:28px}
+.progress-top{display:flex;justify-content:space-between;font-size:12px}.percent{color:#ffc053;font-weight:700}
+.bar{height:6px;background:#5b636b;border-radius:5px;margin:10px 0;overflow:hidden}.bar i{display:block;height:100%;background:#ff7253}
+section{margin-bottom:32px}.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:12px}
+.step{font-size:10px;color:#f06445;letter-spacing:.1em;margin:0 0 3px}h2{font-size:20px;margin:0}
+.badge-count{font-size:11px;background:#fff0d6;color:#9a6425;border-radius:12px;padding:5px 9px}
+label.field{display:block;font-size:12px;font-weight:700;margin:12px 0}
+input[type=text],textarea{display:block;width:100%;margin-top:6px;border:1px solid #ddd8cf;border-radius:10px;background:#fffefa;padding:12px;font:inherit}
+textarea{resize:vertical}
+.hint{font-size:11px;color:#777}
+.upload{border:1.5px dashed #e7b79c;border-radius:14px;background:#fff9f1;min-height:120px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer}
+.upload input{display:none}.plus{width:38px;height:38px;border-radius:50%;background:#ff704f;color:white;font-size:24px;display:flex;align-items:center;justify-content:center}
+.upload strong{font-size:14px;margin-top:7px}.upload small{font-size:11px;color:#888;margin-top:3px}
+.preview{display:flex;gap:14px;align-items:center;margin-top:12px}.preview-box{width:150px;height:150px;border:1px solid #e5e1d9;border-radius:10px;background:white;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.preview-box img{max-width:100%;max-height:100%;object-fit:contain}
+.remove{position:absolute;right:6px;top:6px;border:0;border-radius:50%;background:#fff;box-shadow:0 1px 4px #aaa;width:26px;height:26px}
+.meta{font-size:11px;color:#777}.ok{font-size:11px;color:#4e9667}.bad{font-size:11px;color:#d45b40;margin:3px 0}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}.card{min-width:0}.card-box{height:145px;background:#fff;border:1px solid #e5e1d9;border-radius:10px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.card-box img{max-width:100%;max-height:100%;object-fit:contain}.num{position:absolute;left:6px;top:6px;background:#29323d;color:#fff;border-radius:4px;padding:2px 5px;font-size:10px}.card .remove{right:6px;top:6px}.card p{font-size:10px;color:#777;margin:5px 0}
+.check{border-top:1px solid #e5e1d9}.check-row{min-height:45px;border-bottom:1px solid #e5e1d9;display:flex;align-items:center;gap:9px;font-size:12px}.check-icon{width:19px;height:19px;border:1px solid #ccc;border-radius:50%;display:flex;align-items:center;justify-content:center}.done .check-icon{background:#65a979;border-color:#65a979;color:white}.done b{margin-left:auto;color:#5a9b6e;font-size:11px}
+.export{background:#fff1cf;border-radius:16px;padding:16px}.export button{width:100%;margin-top:12px;padding:13px;border:0;border-radius:9px;background:#29323d;color:#fff;font-weight:700}.export button:disabled{background:#aaa}
+footer{text-align:center;color:#999;font-size:10px;margin-top:28px}
+@media(min-width:600px){main{padding-left:30px;padding-right:30px}.grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:430px){.preview{display:block}.preview-box{margin-bottom:8px}}
+</style>
+</head>
+<body>
+<main id="app">
+<header><strong>スタンプ工房</strong><span class="ver">Ver.2</span></header>
 
-const state = { stickers: [], title: '', description: '', exporting: false }
-const app = document.querySelector('#root')
+<div class="hero">
+<div class="eyebrow">LINE STICKER SUPPORT</div>
+<h1>スタンプ制作、<br><span>ここからはじめよう。</span></h1>
+<p>画像を集めて、チェックして、提出用ZIPを作成できます。</p>
+</div>
 
-function imageIssues(file, width, height) {
-  const issues = []
-  if (file.type !== 'image/png') issues.push('PNG形式ではありません')
-  if (width > MAX_WIDTH || height > MAX_HEIGHT) issues.push('サイズが370 × 320pxを超えています')
-  if (file.size > 1024 * 1024) issues.push('ファイルサイズが1MBを超えています')
-  return issues
+<div class="progress">
+<div class="progress-top"><span>制作の進み具合</span><span class="percent" id="percent">0%</span></div>
+<div class="bar"><i id="bar" style="width:0%"></i></div>
+<small id="progressText">0 / 7 の準備が完了</small>
+</div>
+
+<section>
+<div class="section-head"><div><p class="step">01 / DETAILS</p><h2>スタンプ情報</h2></div></div>
+<label class="field">タイトル
+<input id="title" type="text" maxlength="40" placeholder="例：毎日つかえる ねこスタンプ">
+</label>
+<label class="field">説明文
+<textarea id="description" rows="3" maxlength="160" placeholder="スタンプの紹介を入力してください"></textarea>
+</label>
+</section>
+
+<section>
+<div class="section-head"><div><p class="step">02 / MAIN IMAGE</p><h2>メイン画像</h2></div><span class="badge-count">240×240</span></div>
+<p class="hint">PNG・240×240px・1MB以内</p>
+<label class="upload"><input id="mainInput" type="file" accept="image/png"><span class="plus">＋</span><strong>メイン画像を追加</strong><small>タップして選択</small></label>
+<div id="mainPreview"></div>
+</section>
+
+<section>
+<div class="section-head"><div><p class="step">03 / STICKERS</p><h2>スタンプ画像</h2></div><span class="badge-count" id="stickerCount">0 / 40</span></div>
+<p class="hint">PNG・最大370×320px・1MB以内・1画像＝1種類</p>
+<label class="upload" id="stickerUpload"><input id="stickerInput" type="file" accept="image/png" multiple><span class="plus">＋</span><strong>スタンプ画像を追加</strong><small>一度に複数選択できます</small></label>
+<div class="grid" id="stickerGrid"></div>
+</section>
+
+<section>
+<div class="section-head"><div><p class="step">04 / CHAT TAB</p><h2>トークルームタブ画像</h2></div><span class="badge-count">96×74</span></div>
+<p class="hint">PNG・96×74px・1MB以内</p>
+<label class="upload"><input id="tabInput" type="file" accept="image/png"><span class="plus">＋</span><strong>タブ画像を追加</strong><small>タップして選択</small></label>
+<div id="tabPreview"></div>
+</section>
+
+<section>
+<div class="section-head"><div><p class="step">05 / FINAL CHECK</p><h2>提出前チェック</h2></div></div>
+<div class="check" id="checks"></div>
+</section>
+
+<section class="export">
+<strong>提出用データを作成</strong>
+<p class="hint">main.png / stickers/01.png〜 / tab.png / submission-info.txt をZIPにまとめます。</p>
+<button id="zipButton" disabled>ZIPを作成</button>
+</section>
+
+<footer>スタンプ工房 Ver.2</footer>
+</main>
+
+<script>
+(function(){
+"use strict";
+
+var state={title:"",description:"",main:null,tab:null,stickers:[],busy:false};
+
+function $(id){return document.getElementById(id);}
+function escapeHtml(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function revoke(item){
+  if(item && item.url){URL.revokeObjectURL(item.url);}
+}
+function makeItem(file,kind){
+  return new Promise(function(resolve,reject){
+    if(!file){reject(new Error("ファイルがありません"));return;}
+    var url=URL.createObjectURL(file);
+    var img=new Image();
+    img.onload=function(){
+      var w=img.naturalWidth,h=img.naturalHeight;
+      var issues=[];
+      if(file.type!=="image/png") issues.push("PNG形式ではありません");
+      if(kind==="main" && (w!==240 || h!==240)) issues.push("240×240pxではありません");
+      if(kind==="tab" && (w!==96 || h!==74)) issues.push("96×74pxではありません");
+      if(kind==="sticker" && (w>370 || h>320)) issues.push("370×320pxを超えています");
+      if((w%2)!==0 || (h%2)!==0) issues.push("幅・高さは偶数にしてください");
+      if(file.size>1024*1024) issues.push("1MBを超えています");
+      resolve({file:file,url:url,w:w,h:h,issues:issues,kind:kind});
+    };
+    img.onerror=function(){URL.revokeObjectURL(url);reject(new Error("画像を読み込めません"));};
+    img.src=url;
+  });
 }
 
-function readImage(file) {
-  return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(file)
-    const image = new Image()
-    image.onload = () => resolve({ id: crypto.randomUUID(), file, url, width: image.width, height: image.height, issues: imageIssues(file, image.width, image.height) })
-    image.onerror = () => { URL.revokeObjectURL(url); reject(new Error('画像を読み込めませんでした')) }
-    image.src = url
-  })
+function imageOK(item){return !!item && item.issues.length===0;}
+function totalSize(){
+  var n=0,i;
+  if(state.main)n+=state.main.file.size;
+  if(state.tab)n+=state.tab.file.size;
+  for(i=0;i<state.stickers.length;i++)n+=state.stickers[i].file.size;
+  return n;
 }
-
-async function addFiles(files) {
-  const selected = [...files].slice(0, Math.max(0, MAX_STICKERS - state.stickers.length))
-  const images = await Promise.all(selected.map((file) => readImage(file).catch(() => null)))
-  state.stickers.push(...images.filter(Boolean))
-  render()
-}
-
-function removeSticker(id) {
-  const index = state.stickers.findIndex((sticker) => sticker.id === id)
-  if (index >= 0) URL.revokeObjectURL(state.stickers[index].url)
-  state.stickers.splice(index, 1)
-  render()
-}
-
-function checksum(bytes) {
-  let crc = -1
-  for (const byte of bytes) {
-    crc ^= byte
-    for (let bit = 0; bit < 8; bit += 1) crc = (crc >>> 1) ^ (0xedb88320 & -(crc & 1))
-  }
-  return (crc ^ -1) >>> 0
-}
-
-function u16(value) { return [value & 255, (value >>> 8) & 255] }
-function u32(value) { return [value & 255, (value >>> 8) & 255, (value >>> 16) & 255, (value >>> 24) & 255] }
-
-async function zipFiles(files) {
-  const encoder = new TextEncoder()
-  const entries = await Promise.all(files.map(async ({ name, file }) => ({ name: encoder.encode(name), data: new Uint8Array(await file.arrayBuffer()) })))
-  const body = []
-  const directory = []
-  let directorySize = 0
-  let offset = 0
-  for (const entry of entries) {
-    const crc = checksum(entry.data)
-    const header = [80, 75, 3, 4, ...u16(20), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(crc), ...u32(entry.data.length), ...u32(entry.data.length), ...u16(entry.name.length), ...u16(0), ...entry.name]
-    body.push(new Uint8Array(header), entry.data)
-    const central = new Uint8Array([80, 75, 1, 2, ...u16(20), ...u16(20), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(crc), ...u32(entry.data.length), ...u32(entry.data.length), ...u16(entry.name.length), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(offset), ...entry.name])
-    directory.push(central); directorySize += central.length
-    offset += header.length + entry.data.length
-  }
-  const end = new Uint8Array([80, 75, 5, 6, ...u16(0), ...u16(0), ...u16(entries.length), ...u16(entries.length), ...u32(directorySize), ...u32(offset), ...u16(0)])
-  return new Blob([...body, ...directory, end], { type: 'application/zip' })
-}
-
-async function downloadZip() {
-  if (!state.stickers.length || state.exporting) return
-  state.exporting = true; render()
-  try {
-    const info = new File([`タイトル: ${state.title || '未入力'}\n説明: ${state.description || '未入力'}\nスタンプ数: ${state.stickers.length}\n`], 'submission-info.txt', { type: 'text/plain' })
-    const files = state.stickers.map((sticker, index) => ({ name: `stickers/${String(index + 1).padStart(2, '0')}.png`, file: sticker.file }))
-    files.push({ name: 'submission-info.txt', file: info })
-    const link = document.createElement('a')
-    link.href = URL.createObjectURL(await zipFiles(files))
-    link.download = 'line-stickers.zip'
-    link.click(); URL.revokeObjectURL(link.href)
-  } finally { state.exporting = false; render() }
-}
-
-function checklist() {
-  const warnings = state.stickers.reduce((sum, sticker) => sum + sticker.issues.length, 0)
+function allChecks(){
   return [
-    ['スタンプのタイトルを入力', Boolean(state.title.trim())], ['スタンプの説明文を入力', Boolean(state.description.trim())], ['画像を1枚以上追加', state.stickers.length > 0],
-    ['すべての画像がPNG形式・規定サイズ内', state.stickers.length > 0 && warnings === 0], ['スタンプを8・16・24・32・40個のいずれか用意', [8, 16, 24, 32, 40].includes(state.stickers.length)],
-  ]
+    ["タイトルを入力",state.title.trim().length>0],
+    ["説明文を入力",state.description.trim().length>0],
+    ["メイン画像を登録",imageOK(state.main)],
+    ["スタンプを8・16・24・32・40個用意",[8,16,24,32,40].indexOf(state.stickers.length)>=0],
+    ["スタンプ画像がすべて規定内",state.stickers.length>0 && state.stickers.every(imageOK)],
+    ["タブ画像を登録",imageOK(state.tab)],
+    ["ZIP全体が60MB以下",totalSize()<=60*1024*1024]
+  ];
 }
 
-function render() {
-  const checks = checklist(); const done = checks.filter(([, complete]) => complete).length; const warningCount = state.stickers.reduce((sum, sticker) => sum + sticker.issues.length, 0)
-  app.innerHTML = `<main>
-    <header class="topbar"><div class="brand-mark"><span></span><span></span><span></span></div><strong>スタンプ工房</strong><span class="version">Ver.1</span></header>
-    <section class="hero"><p class="eyebrow">LINE STICKER MAKER</p><h1>スタンプ制作、<br><em>ここからはじめよう。</em></h1><p>画像を集めて、チェックして、提出用にひとまとめ。</p></section>
-    <section class="progress-card"><div><span>制作の進み具合</span><b>${Math.round(done / checks.length * 100)}%</b></div><div class="progress"><i style="width:${done / checks.length * 100}%"></i></div><small>${done} / ${checks.length} の準備が完了</small></section>
-    <section class="section"><div class="section-heading"><div><p class="step">01 / DETAILS</p><h2>スタンプ情報</h2></div><span>ⓘ</span></div><label>タイトル <small>必須</small><input id="title" value="${escapeHtml(state.title)}" maxlength="40" placeholder="例：毎日つかえる ねこスタンプ"></label><label>説明文 <small>必須</small><textarea id="description" maxlength="160" placeholder="スタンプの紹介を入力してください" rows="3">${escapeHtml(state.description)}</textarea></label></section>
-    <section class="section images-section"><div class="section-heading"><div><p class="step">02 / IMAGES</p><h2>スタンプ画像</h2></div><span class="count">${state.stickers.length} / ${MAX_STICKERS}</span></div><p class="hint">PNG・370 × 320px以内・1MB以内を推奨</p><label class="drop-zone" id="drop-zone"><input id="files" type="file" accept="image/*" multiple><div class="upload-icon">＋</div><b>画像を追加</b><span>タップして選択</span></label>
-    ${state.stickers.length ? `<div class="image-grid">${state.stickers.map((sticker, index) => `<article class="sticker-card"><div class="image-frame"><img src="${sticker.url}" alt="スタンプ ${index + 1}"><span>${String(index + 1).padStart(2, '0')}</span><button class="remove" data-id="${sticker.id}" aria-label="${index + 1}番を削除">×</button></div><p>${sticker.width} × ${sticker.height}</p>${sticker.issues.length ? `<div class="issue">⚠ ${sticker.issues[0]}</div>` : '<div class="ok">✓ 確認済み</div>'}</article>`).join('')}</div>` : ''}${warningCount ? `<div class="warning"><b>⚠</b><p><strong>${warningCount}件の確認事項があります</strong><br>画像の形式・サイズを見直してからZIP化してください。</p></div>` : ''}</section>
-    <section class="section checklist-section"><div class="section-heading"><div><p class="step">03 / FINAL CHECK</p><h2>提出前チェック</h2></div><span>✓</span></div><div class="checklist">${checks.map(([label, complete]) => `<div class="${complete ? 'done' : ''}"><span>${complete ? '✓' : ''}</span><p>${label}</p>${complete ? '<b>OK</b>' : ''}</div>`).join('')}</div></section>
-    <section class="export-card"><div class="export-icon">▣</div><div><p>提出用データを作成</p><small>画像を連番で整理してZIP化します</small></div><span>›</span><button id="export" ${!state.stickers.length || state.exporting ? 'disabled' : ''}>⇩ ${state.exporting ? '作成中...' : 'ZIPを作成'}</button></section><footer>まずは画像の整理から。あなたのスタンプづくりを応援します。</footer></main>`
-  document.querySelector('#title').addEventListener('input', (event) => { state.title = event.target.value })
-  document.querySelector('#description').addEventListener('input', (event) => { state.description = event.target.value })
-  document.querySelector('#title').addEventListener('blur', render)
-  document.querySelector('#description').addEventListener('blur', render)
-  document.querySelector('#files').addEventListener('change', (event) => addFiles(event.target.files))
-  document.querySelector('#drop-zone').addEventListener('dragover', (event) => { event.preventDefault(); event.currentTarget.classList.add('dragging') })
-  document.querySelector('#drop-zone').addEventListener('dragleave', (event) => event.currentTarget.classList.remove('dragging'))
-  document.querySelector('#drop-zone').addEventListener('drop', (event) => { event.preventDefault(); event.currentTarget.classList.remove('dragging'); addFiles(event.dataTransfer.files) })
-  document.querySelectorAll('.remove').forEach((button) => button.addEventListener('click', () => removeSticker(button.dataset.id)))
-  document.querySelector('#export').addEventListener('click', downloadZip)
+function renderChecks(){
+  var list=allChecks(),html="",i,done=0;
+  for(i=0;i<list.length;i++){
+    if(list[i][1])done++;
+    html+='<div class="check-row '+(list[i][1]?"done":"")+'"><span class="check-icon">'+(list[i][1]?"✓":"")+'</span><span>'+escapeHtml(list[i][0])+'</span>'+(list[i][1]?'<b>OK</b>':"")+'</div>';
+  }
+  $("checks").innerHTML=html;
+  var percent=Math.round(done/list.length*100);
+  $("percent").textContent=percent+"%";
+  $("bar").style.width=percent+"%";
+  $("progressText").textContent=done+" / "+list.length+" の準備が完了";
+  $("zipButton").disabled=!(done===list.length) || state.busy;
 }
 
-function escapeHtml(value) { return value.replace(/[&<>"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[character]) }
-render()
-    </script>
-  </body>
+function issueHtml(item){
+  if(!item.issues.length)return '<div class="ok">✓ 規格チェックOK</div>';
+  var h="",i;
+  for(i=0;i<item.issues.length;i++)h+='<div class="bad">⚠ '+escapeHtml(item.issues[i])+'</div>';
+  return h;
+}
+
+function renderSingle(item,target,label){
+  if(!item){target.innerHTML="";return;}
+  target.innerHTML='<div class="preview"><div class="preview-box"><img src="'+item.url+'" alt=""><button class="remove" type="button" data-remove="'+label+'">×</button></div><div><div class="meta">'+item.w+' × '+item.h+'px / '+(item.file.size/1024).toFixed(1)+'KB</div>'+issueHtml(item)+'</div></div>';
+}
+
+function renderStickers(){
+  $("stickerCount").textContent=state.stickers.length+" / 40";
+  var html="",i,item;
+  for(i=0;i<state.stickers.length;i++){
+    item=state.stickers[i];
+    html+='<div class="card"><div class="card-box"><img src="'+item.url+'" alt=""><span class="num">'+String(i+1).padStart(2,"0")+'</span><button class="remove" type="button" data-remove-sticker="'+i+'">×</button></div><p>'+item.w+'×'+item.h+'px / '+(item.file.size/1024).toFixed(1)+'KB</p>'+issueHtml(item)+'</div>';
+  }
+  $("stickerGrid").innerHTML=html;
+}
+
+function render(){
+  renderSingle(state.main,$("mainPreview"),"main");
+  renderSingle(state.tab,$("tabPreview"),"tab");
+  renderStickers();
+  renderChecks();
+}
+
+$("title").addEventListener("input",function(e){state.title=e.target.value;renderChecks();});
+$("description").addEventListener("input",function(e){state.description=e.target.value;renderChecks();});
+
+$("mainInput").addEventListener("change",function(e){
+  var file=e.target.files && e.target.files[0];
+  if(!file)return;
+  makeItem(file,"main").then(function(item){
+    revoke(state.main);state.main=item;render();
+  }).catch(function(){alert("画像を読み込めませんでした");});
+});
+
+$("tabInput").addEventListener("change",function(e){
+  var file=e.target.files && e.target.files[0];
+  if(!file)return;
+  makeItem(file,"tab").then(function(item){
+    revoke(state.tab);state.tab=item;render();
+  }).catch(function(){alert("画像を読み込めませんでした");});
+});
+
+$("stickerInput").addEventListener("change",function(e){
+  var files=e.target.files || [],left=40-state.stickers.length;
+  var selected=[],i;
+  for(i=0;i<files.length && i<left;i++)selected.push(files[i]);
+  Promise.all(selected.map(function(f){return makeItem(f,"sticker");})).then(function(items){
+    for(i=0;i<items.length;i++)state.stickers.push(items[i]);
+    render();
+  });
+  e.target.value="";
+});
+
+document.addEventListener("click",function(e){
+  var b=e.target.closest ? e.target.closest("[data-remove]") : null;
+  if(b){
+    var k=b.getAttribute("data-remove");
+    if(k==="main"){revoke(state.main);state.main=null;}
+    if(k==="tab"){revoke(state.tab);state.tab=null;}
+    render();return;
+  }
+  b=e.target.closest ? e.target.closest("[data-remove-sticker]") : null;
+  if(b){
+    var index=parseInt(b.getAttribute("data-remove-sticker"),10);
+    if(!isNaN(index) && state.stickers[index]){
+      revoke(state.stickers[index]);state.stickers.splice(index,1);render();
+    }
+  }
+});
+
+function u16(n){return [n&255,(n>>>8)&255];}
+function u32(n){return [n&255,(n>>>8)&255,(n>>>16)&255,(n>>>24)&255];}
+function crc32(bytes){
+  var table=crc32.table,i,j,c;
+  if(!table){
+    table=[];
+    for(i=0;i<256;i++){
+      c=i;
+      for(j=0;j<8;j++)c=(c&1)?(0xedb88320^(c>>>1)):(c>>>1);
+      table[i]=c>>>0;
+    }
+    crc32.table=table;
+  }
+  c=0xffffffff;
+  for(i=0;i<bytes.length;i++)c=table[(c^bytes[i])&255]^(c>>>8);
+  return (c^0xffffffff)>>>0;
+}
+function asciiBytes(s){
+  var out=[],i;
+  for(i=0;i<s.length;i++)out.push(s.charCodeAt(i)&255);
+  return new Uint8Array(out);
+}
+function concatArrays(arrays){
+  var total=0,i,pos=0,out;
+  for(i=0;i<arrays.length;i++)total+=arrays[i].length;
+  out=new Uint8Array(total);
+  for(i=0;i<arrays.length;i++){out.set(arrays[i],pos);pos+=arrays[i].length;}
+  return out;
+}
+function makeZip(entries){
+  return Promise.all(entries.map(function(entry){
+    return entry.file.arrayBuffer().then(function(buf){return {name:asciiBytes(entry.name),data:new Uint8Array(buf)};});
+  })).then(function(items){
+    var local=[],central=[],offset=0,centralSize=0,i,item,crc,lh,ch;
+    for(i=0;i<items.length;i++){
+      item=items[i];crc=crc32(item.data);
+      lh=new Uint8Array([80,75,3,4].concat(u16(20),u16(0),u16(0),u16(0),u16(0),u32(crc),u32(item.data.length),u32(item.data.length),u16(item.name.length),u16(0)));
+      lh=concatArrays([lh,item.name]);
+      local.push(lh,item.data);
+      ch=new Uint8Array([80,75,1,2].concat(u16(20),u16(20),u16(0),u16(0),u16(0),u16(0),u32(crc),u32(item.data.length),u32(item.data.length),u16(item.name.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(offset)));
+      ch=concatArrays([ch,item.name]);
+      central.push(ch);centralSize+=ch.length;offset+=lh.length+item.data.length;
+    }
+    var end=new Uint8Array([80,75,5,6,0,0,0,0].concat(u16(items.length),u16(items.length),u32(centralSize),u32(offset),u16(0)));
+    return new Blob([concatArrays(local),concatArrays(central),end],{type:"application/zip"});
+  });
+}
+
+$("zipButton").addEventListener("click",function(){
+  var checks=allChecks(),i;
+  for(i=0;i<checks.length;i++)if(!checks[i][1]){alert("提出前チェックをすべてOKにしてください。");return;}
+  state.busy=true;renderChecks();
+  var info=new File(["タイトル: "+state.title+"\n説明: "+state.description+"\nスタンプ数: "+state.stickers.length+"\n"],"submission-info.txt",{type:"text/plain"});
+  var entries=[{name:"main.png",file:state.main.file}];
+  for(i=0;i<state.stickers.length;i++)entries.push({name:"stickers/"+String(i+1).padStart(2,"0")+".png",file:state.stickers[i].file});
+  entries.push({name:"tab.png",file:state.tab.file},{name:"submission-info.txt",file:info});
+  makeZip(entries).then(function(blob){
+    if(blob.size>60*1024*1024)throw new Error("ZIPが60MBを超えています");
+    var url=URL.createObjectURL(blob),a=document.createElement("a");
+    a.href=url;a.download="line-stickers.zip";document.body.appendChild(a);a.click();a.remove();
+    setTimeout(function(){URL.revokeObjectURL(url);},1000);
+  }).catch(function(err){alert(err.message||"ZIP作成に失敗しました");}).then(function(){state.busy=false;renderChecks();});
+});
+
+render();
+})();
+</script>
+</body>
 </html>
